@@ -1,7 +1,6 @@
-package com.example
+package com.example.pokeathttp4s
 
 import org.http4s._
-import org.http4s.server._
 import org.http4s.dsl._
 
 import _root_.argonaut._, Argonaut._
