@@ -7,23 +7,21 @@ import org.http4s.dsl._
 import _root_.argonaut._, Argonaut._
 import org.http4s.argonaut._
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 import scalaz.concurrent.Task
-import scala.concurrent.duration._
 
 
 object HelloWorld {
-
 
   val service = HttpService {
     case GET -> Root / "rooms" =>
       Ok(RoomsDAO.listAll().map(_.asJson))
     case GET -> Root / "rooms" / roomId =>
-      Await.result(getRoomResponse(roomId), 2.seconds) // this is sad - need to figure how to use http4s with Futures
+      getRoomResponse(roomId)
   }
 
-  def getRoomResponse(roomId: String): Future[Task[Response]] = {
-    getRoom(roomId.toLong) map {
+  def getRoomResponse(roomId: String): Task[Response] = {
+    Util.futureToTask(getRoom(roomId.toLong)) flatMap  {
       case Some((room, messages)) =>
         Ok(jObjectFields(
           ("name", room.name.asJson),
