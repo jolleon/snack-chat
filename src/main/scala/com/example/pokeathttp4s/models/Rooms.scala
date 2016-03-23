@@ -28,4 +28,8 @@ object RoomsDAO {
     db.run(rooms.result)
   }
 
+  def getById(roomId: Long): Future[Option[Room]] = {
+    db.run(rooms.filter(_.id === roomId).result.headOption)
+  }
+
 }

@@ -27,12 +27,9 @@ class Messages(tag: Tag) extends Table[Message](tag, "MESSAGES") {
 object MessagesDAO {
   val messages = TableQuery[Messages]
 
-  def listAll(): Future[Seq[Message]] = {
-    db.run(messages.result)
-  }
-
-  def forRoom(roomId: Long) = {
-    db.run(messages.filter(_.roomId === roomId).result)
+  def forRoom(roomId: Long): Future[Seq[Message]] = {
+    val q = messages.filter(_.roomId === roomId)
+    db.run(q.result)
   }
 
 }
