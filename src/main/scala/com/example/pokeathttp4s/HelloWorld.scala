@@ -1,6 +1,6 @@
 package com.example.pokeathttp4s
 
-import com.example.pokeathttp4s.models.RoomsDAO
+import com.example.pokeathttp4s.models.{MessagesDAO, RoomsDAO}
 import org.http4s._
 import org.http4s.dsl._
 
@@ -17,5 +17,7 @@ object HelloWorld {
       Ok(jSingleObject("message", jString(s"Hello, $name")))
     case GET -> Root / "db" =>
       Ok(RoomsDAO.listAll().map(_.asJson))
+    case GET -> Root / "rooms" / roomId =>
+      Ok(MessagesDAO.forRoom(roomId.toLong).map(_.asJson))
   }
 }

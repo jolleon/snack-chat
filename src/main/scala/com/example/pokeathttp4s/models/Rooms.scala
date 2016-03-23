@@ -7,6 +7,7 @@ import scala.concurrent.Future
 
 case class Room(id: Long, name: String)
 
+// JSON converter so we can use the case class directly in the API
 object Room {
   implicit def RoomCodecJson: CodecJson[Room] =
     casecodec2(Room.apply, Room.unapply)("id", "name")
@@ -21,8 +22,6 @@ class Rooms(tag: Tag) extends Table[Room](tag, "ROOMS") {
 }
 
 object RoomsDAO {
-  val db = Database.forConfig("database")
-
   val rooms = TableQuery[Rooms]
 
   def listAll(): Future[Seq[Room]] = {
