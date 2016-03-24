@@ -24,6 +24,7 @@ object HelloWorld {
     Util.futureToTask(getRoom(roomId.toLong)) flatMap  {
       case Some((room, messages)) =>
         Ok(jObjectFields(
+          ("id", room.id.asJson),
           ("name", room.name.asJson),
           ("messages", messages.asJson)
         ))

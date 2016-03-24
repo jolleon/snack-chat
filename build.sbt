@@ -19,3 +19,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick" % "3.1.1",
   "org.slf4j" % "slf4j-nop" % "1.6.4"
 )
+
+libraryDependencies ++= Seq(
+  "joda-time" % "joda-time" % "2.7",
+  "org.joda" % "joda-convert" % "1.7"
+)
