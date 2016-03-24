@@ -23,11 +23,7 @@ object HelloWorld {
   def getRoomResponse(roomId: String): Task[Response] = {
     Util.futureToTask(getRoom(roomId.toLong)) flatMap  {
       case Some((room, messages)) =>
-        Ok(jObjectFields(
-          ("id", room.id.asJson),
-          ("name", room.name.asJson),
-          ("messages", messages.asJson)
-        ))
+        Ok(room.asJson.->:(("messages", messages.asJson)))
       case None => NotFound()
     }
   }
