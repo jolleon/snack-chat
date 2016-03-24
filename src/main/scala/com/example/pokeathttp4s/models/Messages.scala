@@ -1,16 +1,17 @@
 package com.example.pokeathttp4s.models
 
+import org.joda.time.DateTime
 import slick.driver.PostgresDriver.api._
 import argonaut._, Argonaut._
 import scala.concurrent.Future
 
 
-case class Message(id: Long, roomId: Long, author: String, content: String)
+case class Message(id: Long, roomId: Long, author: String, content: String, created: DateTime)
 
 // JSON converter so we can use the case class directly in the API
 object Message {
   implicit def MessageCodecJson: CodecJson[Message] =
-    casecodec4(Message.apply, Message.unapply)("id", "roomId", "author", "content")
+    casecodec5(Message.apply, Message.unapply)("id", "roomId", "author", "content", "created")
 }
 
 
@@ -19,8 +20,9 @@ class Messages(tag: Tag) extends Table[Message](tag, "MESSAGES") {
   def roomId = column[Long]("roomId")
   def author = column[String]("author")
   def content = column[String]("content")
+  def created = column[DateTime]("created")
 
-  def * = (id, roomId, author, content) <> ((Message.apply _).tupled, Message.unapply)
+  def * = (id, roomId, author, content, created) <> ((Message.apply _).tupled, Message.unapply)
   def room = foreignKey("ROOM_FK", roomId, RoomsDAO.rooms)(_.id)
 }
 
