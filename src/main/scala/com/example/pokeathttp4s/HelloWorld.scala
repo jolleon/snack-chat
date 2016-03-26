@@ -1,6 +1,6 @@
 package com.example.pokeathttp4s
 
-import com.example.pokeathttp4s.models.{Room, MessagesDAO, MessageInput, RoomsDAO}
+import com.example.pokeathttp4s.models._
 import org.http4s._
 import org.http4s.dsl._
 
@@ -21,6 +21,12 @@ object HelloWorld {
       req.decode[MessageInput] { m =>
         Util.futureToTask(MessagesDAO.postToRoom(roomId.toLong, m)) flatMap { message =>
           Ok(message.asJson)
+        }
+      }
+    case req @ POST -> Root / "rooms" =>
+      req.decode[RoomInput] { r =>
+        Util.futureToTask(RoomsDAO.create(r)) flatMap { room =>
+          Ok(room.asJson)
         }
       }
   }
