@@ -1,6 +1,6 @@
 package com.example.pokeathttp4s
 
-import com.example.pokeathttp4s.models.{Room, Message, MessagesDAO, RoomsDAO}
+import com.example.pokeathttp4s.models.{Room, MessagesDAO, MessageInput, RoomsDAO}
 import org.http4s._
 import org.http4s.dsl._
 
@@ -10,7 +10,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scalaz.concurrent.Task
 
-
 object HelloWorld {
 
   val service = HttpService {
@@ -18,6 +17,12 @@ object HelloWorld {
       Ok(RoomsDAO.listAll().map(_.asJson))
     case GET -> Root / "rooms" / roomId =>
       getRoomResponse(roomId)
+    case req @ POST -> Root / "rooms" / roomId =>
+      req.decode[MessageInput] { m =>
+        Util.futureToTask(MessagesDAO.postToRoom(roomId.toLong, m)) flatMap { message =>
+          Ok(message.asJson)
+        }
+      }
   }
 
   def getRoomResponse(roomId: String): Task[Response] = {
@@ -28,7 +33,7 @@ object HelloWorld {
     }
   }
 
-  def getRoom(roomId: Long): Future[Option[(Room, Seq[Message])]] = {
+  def getRoom(roomId: Long): Future[Option[(Room, Seq[models.Message])]] = {
     val rF = RoomsDAO.getById(roomId)
     val mF = MessagesDAO.forRoom(roomId)
     for {
