@@ -17,6 +17,8 @@ object HelloWorld {
       Ok(RoomsDAO.listAll().map(_.asJson))
     case req @ GET -> Root / "api" / "rooms" / roomId =>
       getRoomResponse(roomId)
+    case req @ GET -> Root / "api" / "rooms" / roomId / "messages" =>
+      Ok(MessagesDAO.forRoom(roomId.toLong).map(_.asJson))
     case req @ POST -> Root / "api" / "rooms" =>
       req.decode[RoomInput] { r =>
         Util.futureToTask(RoomsDAO.create(r)) flatMap { room =>
