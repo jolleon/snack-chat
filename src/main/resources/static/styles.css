@@ -1,0 +1,54 @@
+.sidebar {
+    position: fixed;
+    background-color: #4d394b;
+    top: 0;
+    bottom: 0;
+    border-right: solid 1px #dddddd;
+    width: 250px;
+}
+
+.sidebar h1 {
+    color: white;
+}
+
+.sidebar a {
+    color: #ab9ba9;
+}
+
+.nav-sidebar {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.main {
+    padding-left: 250px;
+    width: 100%;
+}
+
+.room-header {
+    padding: 20px;
+    padding-left: 40px;
+}
+
+.author {
+    font-weight: bold;
+    text-align: right;
+}
+
+.message {
+    padding: 20px;
+    border-top: solid 1px #eeeeee;
+}
+
+
+.lowerBox {
+    padding-left: 250px;
+    width: 100%;
+    position: fixed;
+    bottom: 20px;
+}
+
+.message-input {
+    padding-left: 30px;
+    padding-right: 30px;
+}
