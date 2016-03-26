@@ -11,6 +11,12 @@ var RoomView = Backbone.View.extend({
         _.bindAll(this, 'render');
     },
     render: function() {
+        if (this.model.get("id") == messages.roomId){
+            $(this.el).addClass("active");
+        }
+        else {
+            $(this.el).removeClass("active");
+        }
         $(this.el).html('<a href="#room/' + this.model.get('id') + '">' + this.model.get('name') + "</a>");
         return this;
     }
@@ -206,6 +212,7 @@ var Workspace = Backbone.Router.extend({
         console.log("entering room " + roomId);
         messages.roomId = roomId;
         refreshMessages();
+        refreshRooms();
     }
 });
 
@@ -216,7 +223,7 @@ Backbone.history.start();
 refreshRooms();
 refreshMessages();
 
-setInterval(refreshMessages, 1000);
+//setInterval(refreshMessages, 1000);
 
 
 $("#newChannelButton").click(function(){
