@@ -76,9 +76,10 @@ var roomsView = new RoomsView();
 
 var refreshRooms = function(){
     rooms.fetch({success: function(){
-        var r = rooms.get(messages.roomId);
-        $(".room-header").html("<h2>" + r.get("name") + "</h2>");
         roomsView.render();
+        var r = rooms.get(messages.roomId);
+        var name = r ? r.get("name") : "Welcome to Snack";
+        $(".room-header").html("<h2>" + name + "</h2>");
         }
     });
 };
