@@ -21,6 +21,30 @@ var rooms = new Rooms;
 var RoomsView = Backbone.View.extend({
     el: $('body'),
 
+    events: {
+        "keyup": "processKey"
+    },
+
+    processKey: function(e) {
+        if(e.which === 13){ // enter key
+            var newName = $("#newChannel").val();
+            $("#newChannel").val("");
+            if(newName.length > 0) {
+                var r = new Room();
+                r.set({"name": newName});
+                rooms.add(r);
+                var self = this;
+                r.save({}, {success: function(){
+                    self.render();
+                    router.navigate("room/" + r.get("id"));
+                    router.room(r.get("id"));
+                    $("#newChannelForm").css("display", "none");
+                    $("#newChannelButton").css("display", "block");
+                }});
+            }
+        }
+    },
+
     initialize: function(){
         _.bindAll(this, 'render');
         this.collection = rooms;
@@ -45,7 +69,12 @@ var RoomsView = Backbone.View.extend({
 var roomsView = new RoomsView();
 
 var refreshRooms = function(){
-    rooms.fetch({success: roomsView.render});
+    rooms.fetch({success: function(){
+        var r = rooms.get(messages.roomId);
+        $(".room-header").html("<h2>" + r.get("name") + "</h2>");
+        roomsView.render();
+        }
+    });
 };
 
 
@@ -98,8 +127,11 @@ var MessagesView = Backbone.View.extend({
             self.appendItem(message);
         }, this);
 
+
         var r = rooms.get(messages.roomId);
-        $(".room-header").html("<h2>" + r.get("name") + "</h2>");
+        if(r){
+            $(".room-header").html("<h2>" + r.get("name") + "</h2>");
+        }
     },
 
     appendItem: function(message){
@@ -185,3 +217,9 @@ refreshRooms();
 refreshMessages();
 
 setInterval(refreshMessages, 1000);
+
+
+$("#newChannelButton").click(function(){
+    $("#newChannelForm").css("display", "block");
+    $("#newChannelButton").css("display", "none");
+});
