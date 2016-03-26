@@ -122,6 +122,56 @@ var refreshMessages = function() {
 refreshMessages();
 
 
+var warningFlash = function(el, t, n) {
+    if(n==0){
+        return;
+    }
+    var old = el.css("border");
+    el.css("border", "solid 3px red");
+    setTimeout(function(){
+        el.css("border", old);
+        setTimeout(function(){warningFlash(el, t, n-1)}, t);
+    }, t);
+};
+
+var FormView = Backbone.View.extend({
+    el: $("#inputText"),
+
+    events: {
+        "submit form": "submit",
+        "keyup": "processKey"
+    },
+
+    processKey: function(e) {
+      if(e.which === 13) // enter key
+        this.submit();
+    },
+
+    submit: function(){
+        console.log("submit");
+        var author = $("#username").val();
+        var content = $("#newMessage").val();
+        if (author.length < 1) {
+            warningFlash($("#username"), 100, 5);
+        };
+        if (content.length < 1) {
+            warningFlash($("#newMessage"), 100, 5);
+        };
+        if(author.length < 1 || content.length < 1) {
+            return;
+        };
+        var m = new Message();
+        m.set({"author": author, "content": content});
+        console.log(m);
+        messages.add(m);
+        m.save();
+        $("#newMessage").val("");
+        messagesView.render();
+    }
+});
+
+new FormView();
+
 
 var Workspace = Backbone.Router.extend({
     routes: {

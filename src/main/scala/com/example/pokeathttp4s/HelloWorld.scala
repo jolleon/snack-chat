@@ -25,7 +25,7 @@ object HelloWorld {
           Ok(room.asJson)
         }
       }
-    case req @ POST -> Root / "api" / "rooms" / roomId =>
+    case req @ POST -> Root / "api" / "rooms" / roomId / "messages" =>
       req.decode[MessageInput] { m =>
         Util.futureToTask(MessagesDAO.postToRoom(roomId.toLong, m)) flatMap { message =>
           Ok(message.asJson)
