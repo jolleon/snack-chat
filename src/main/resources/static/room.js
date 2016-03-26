@@ -132,12 +132,11 @@ var MessagesView = Backbone.View.extend({
         _(this.collection.models).each(function(message){
             self.appendItem(message);
         }, this);
-
-
         var r = rooms.get(messages.roomId);
         if(r){
             $(".room-header").html("<h2>" + r.get("name") + "</h2>");
         }
+        window.scrollTo(0,document.body.scrollHeight);
     },
 
     appendItem: function(message){
