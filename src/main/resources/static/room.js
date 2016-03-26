@@ -31,7 +31,7 @@ var RoomsView = Backbone.View.extend({
         var self = this;
         _(this.collection.models).each(function(room){
             self.appendItem(room);
-        }, this)
+        }, this);
     },
 
     appendItem: function(room){
@@ -47,8 +47,6 @@ var roomsView = new RoomsView();
 var refreshRooms = function(){
     rooms.fetch({success: roomsView.render});
 };
-
-refreshRooms();
 
 
 
@@ -98,7 +96,10 @@ var MessagesView = Backbone.View.extend({
         var self = this;
         _(this.collection.models).each(function(message){
             self.appendItem(message);
-        }, this)
+        }, this);
+
+        var r = rooms.get(messages.roomId);
+        $(".room-header").html("<h2>" + r.get("name") + "</h2>");
     },
 
     appendItem: function(message){
@@ -114,9 +115,6 @@ var refreshMessages = function() {
     messages.fetch({success: messagesView.render})
 };
 
-refreshMessages();
-
-setInterval(refreshMessages, 1000);
 
 var warningFlash = function(el, t, n) {
     if(n==0){
@@ -182,3 +180,8 @@ var Workspace = Backbone.Router.extend({
 var router = new Workspace;
 
 Backbone.history.start();
+
+refreshRooms();
+refreshMessages();
+
+setInterval(refreshMessages, 1000);
