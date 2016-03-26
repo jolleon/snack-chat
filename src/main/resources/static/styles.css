@@ -60,13 +60,17 @@
     border-bottom: solid 1px #dddddd;
 }
 
+.room-header h2::before {
+    content: "#";
+}
+
 .author {
     font-weight: bold;
     text-align: right;
 }
 
 .message {
-    padding: 20px;
+    padding: 10px;
     border-bottom: solid 1px #eeeeee;
 }
 

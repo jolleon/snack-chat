@@ -108,11 +108,10 @@ var MessageView = Backbone.View.extend({
         _.bindAll(this, 'render');
     },
     render: function(){
+        $(this.el).addClass("message row");
         $(this.el).html(`
-        <div class="message">
             <div class="author col-sm-2 col-md-2">${this.model.get('author')}</div>
             <div class="col-sm-10 col-md-10">${this.model.get('content')}</div>
-        </div>
         `);
         return this;
     }
