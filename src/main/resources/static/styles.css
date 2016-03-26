@@ -9,13 +9,23 @@
 
 .sidebar h1 {
     color: white;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
+}
+
+.sidebar h4 {
+    margin-top: 30px;
+    color: #ab9ba9;
 }
 
 .nav-sidebar li a {
     color: #ab9ba9;
     padding-left: 40px;
     font-weight: bold;
+}
+
+.nav-sidebar li a::before {
+    content: "# ";
+    font-weight: normal;
 }
 
 .nav-sidebar {
