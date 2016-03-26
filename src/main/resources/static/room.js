@@ -11,10 +11,7 @@ var RoomView = Backbone.View.extend({
         _.bindAll(this, 'render');
     },
     render: function() {
-        $(this.el).html("<li>" +
-            '<a href="/rooms/' + this.model.get('id') + '">' + this.model.get('name') + "</a>" +
-             "- created " + this.model.get('created') + "</li>"
-         );
+        $(this.el).html('<a href="/room/' + this.model.get('id') + '">' + this.model.get('name') + "</a>");
         return this;
     }
 });

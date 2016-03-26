@@ -9,10 +9,13 @@
 
 .sidebar h1 {
     color: white;
+    margin-bottom: 50px;
 }
 
-.sidebar a {
+.nav-sidebar li a {
     color: #ab9ba9;
+    padding-left: 40px;
+    font-weight: bold;
 }
 
 .nav-sidebar {
