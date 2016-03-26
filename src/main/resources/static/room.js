@@ -35,7 +35,6 @@ var RoomsView = Backbone.View.extend({
     },
 
     appendItem: function(room){
-        console.log(room);
         var roomView = new RoomView({
             model: room
         })
@@ -95,8 +94,6 @@ var MessagesView = Backbone.View.extend({
     },
 
     render: function(){
-        console.log("rendering");
-        console.log(this.collection.models)
         $(this.el).html("");
         var self = this;
         _(this.collection.models).each(function(message){
@@ -105,8 +102,6 @@ var MessagesView = Backbone.View.extend({
     },
 
     appendItem: function(message){
-        console.log("appending item");
-        console.log(message);
         var messageView = new MessageView({
             model: message
         })
@@ -121,6 +116,7 @@ var refreshMessages = function() {
 
 refreshMessages();
 
+setInterval(refreshMessages, 1000);
 
 var warningFlash = function(el, t, n) {
     if(n==0){
@@ -148,7 +144,6 @@ var FormView = Backbone.View.extend({
     },
 
     submit: function(){
-        console.log("submit");
         var author = $("#username").val();
         var content = $("#newMessage").val();
         if (author.length < 1) {
@@ -162,7 +157,6 @@ var FormView = Backbone.View.extend({
         };
         var m = new Message();
         m.set({"author": author, "content": content});
-        console.log(m);
         messages.add(m);
         m.save();
         $("#newMessage").val("");
