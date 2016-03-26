@@ -13,22 +13,26 @@ import scalaz.concurrent.Task
 object HelloWorld {
 
   val service = HttpService {
-    case GET -> Root / "rooms" =>
+    case req @ GET -> Root / "api" / "rooms" =>
       Ok(RoomsDAO.listAll().map(_.asJson))
-    case GET -> Root / "rooms" / roomId =>
+    case req @ GET -> Root / "api" / "rooms" / roomId =>
       getRoomResponse(roomId)
-    case req @ POST -> Root / "rooms" / roomId =>
-      req.decode[MessageInput] { m =>
-        Util.futureToTask(MessagesDAO.postToRoom(roomId.toLong, m)) flatMap { message =>
-          Ok(message.asJson)
-        }
-      }
-    case req @ POST -> Root / "rooms" =>
+    case req @ POST -> Root / "api" / "rooms" =>
       req.decode[RoomInput] { r =>
         Util.futureToTask(RoomsDAO.create(r)) flatMap { room =>
           Ok(room.asJson)
         }
       }
+    case req @ POST -> Root / "api" / "rooms" / roomId =>
+      req.decode[MessageInput] { m =>
+        Util.futureToTask(MessagesDAO.postToRoom(roomId.toLong, m)) flatMap { message =>
+          Ok(message.asJson)
+        }
+      }
+    case req @ GET -> Root =>
+      StaticFile.fromResource("/index.html", Some(req)).fold(NotFound())(Task.now)
+    case req @ GET -> "static" /: path =>
+      StaticFile.fromResource("/static" + path, Some(req)).fold(NotFound())(Task.now)
   }
 
   def getRoomResponse(roomId: String): Task[Response] = {
