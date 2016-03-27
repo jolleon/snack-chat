@@ -193,9 +193,12 @@ var FormView = Backbone.View.extend({
         var m = new Message();
         m.set({"author": author, "content": content});
         messages.add(m);
-        m.save();
+        m.save({}, {success: function(){
+            // remove model - websocket created a duplicate
+            messages.remove(m);
+            messagesView.render();
+        }});
         $("#newMessage").val("");
-        messagesView.render();
     }
 });
 
@@ -208,18 +211,22 @@ ChatWS.prototype.join = function(roomId) {
     this.isOpen = true;
     this.ws = new WebSocket("ws://" + location.host + "/ws/" + roomId);
 
-    // Log errors
     this.ws.onerror = function (error) {
       console.log('WebSocket Error ' + error);
     };
 
-    // Log messages from the server
     this.ws.onmessage = function (e) {
       console.log('Server: ' + e.data);
+      var msg = JSON.parse(e.data);
+      var m = new Message();
+      m.set(msg);
+      messages.add(m);
+      messagesView.render();
     };
 
     var self = this;
     this.ws.onclose = function (e) {
+      // auto reconnect
       console.log('Socket closed: ' + e);
       if (self.isOpen) self.join(roomId);
     };

@@ -47,10 +47,8 @@ object HelloWorld {
 
     case req @ GET -> Root / "ws" / roomId =>
       val chatTopic = chatTopics.getOrElseUpdate(roomId.toLong, topic[String]())
-      chatTopic.publishOne(s"New user in room $roomId").flatMap { _ =>
-        val src = Process.emit(Text(s"Welcome to room $roomId!")) ++ chatTopic.subscribe.map(Text(_))
-        WS(Exchange(src, Process.halt))
-      }
+      val src = chatTopic.subscribe.map(Text(_))
+      WS(Exchange(src, Process.halt))
   }
 
   def getRoomResponse(roomId: String): Task[Response] = {
