@@ -202,6 +202,36 @@ var FormView = Backbone.View.extend({
 new FormView();
 
 
+var ChatWS = function ChatWS(){};
+
+ChatWS.prototype.join = function(roomId) {
+    this.isOpen = true;
+    this.ws = new WebSocket("ws://" + location.host + "/ws/" + roomId);
+
+    // Log errors
+    this.ws.onerror = function (error) {
+      console.log('WebSocket Error ' + error);
+    };
+
+    // Log messages from the server
+    this.ws.onmessage = function (e) {
+      console.log('Server: ' + e.data);
+    };
+
+    var self = this;
+    this.ws.onclose = function (e) {
+      console.log('Socket closed: ' + e);
+      if (self.isOpen) self.join(roomId);
+    };
+};
+
+ChatWS.prototype.close = function() {
+    this.isOpen = false;
+    this.ws.close();
+};
+
+var ws;
+
 var Workspace = Backbone.Router.extend({
     routes: {
         "room/:roomId": "room"
@@ -212,6 +242,9 @@ var Workspace = Backbone.Router.extend({
         messages.roomId = roomId;
         refreshMessages();
         refreshRooms();
+        if (ws) ws.close();
+        ws = new ChatWS();
+        ws.join(roomId);
     }
 });
 
