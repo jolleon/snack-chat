@@ -6,7 +6,7 @@ object Server extends App {
   val port = sys.env.getOrElse("PORT", "5000").toInt
 
   BlazeBuilder.bindHttp(port, "0.0.0.0")
-    .mountService(HelloWorld.service, "/")
+    .mountService(ChatService.service, "/")
     .run
     .awaitShutdown()
 }

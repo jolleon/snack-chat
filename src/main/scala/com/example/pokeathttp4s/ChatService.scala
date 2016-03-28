@@ -16,7 +16,7 @@ import scalaz.stream.async.mutable.Topic
 import scalaz.stream.{Exchange, Process}
 import scalaz.stream.async.topic
 
-object HelloWorld {
+object ChatService {
   private val chatTopics = collection.mutable.Map.empty[Long, Topic[String]]
 
   val service = HttpService {
