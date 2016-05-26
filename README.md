@@ -173,4 +173,4 @@ In order to deal with websockets in Http4s you'll need to create an `Exchange`. 
 
 I figured this was a good time to try Backbone.js. This turned out to be a much easier framework to get started with than all the plumbing I had to do in the backend.
 
-The framework makes a lot of sense, great [documentation](http://backbonejs.org/) and [this tutorial](arturadib.com/hello-backbonejs/) (not working at this time, looks like someone's having DNS issues) were all I needed.
+The framework makes a lot of sense, great [documentation](http://backbonejs.org/) and [this tutorial](http://arturadib.com/hello-backbonejs/) (not working at this time, looks like someone's having DNS issues) were all I needed.
